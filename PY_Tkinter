@@ -1,0 +1,154 @@
+
+import pyttsx3
+friend= pyttsx3.init()
+friend.say("Hello....Welcome to the game.... DO OR DIE......ALL THE BEST")
+friend.runAndWait()
+
+from tkinter import *
+from tkinter import Canvas, Tk, messagebox, font
+from PIL import Image , ImageTk
+from random import randint
+
+def game():
+    
+    window = Tk()
+    window.title("DO OR DIE")
+    window.configure(background = 'yellow')
+
+
+    img_shoot1= ImageTk.PhotoImage(Image.open("shoot1.png"))
+    img_shield1 = ImageTk.PhotoImage(Image.open("shield1.png"))
+    img_scorp1= ImageTk.PhotoImage(Image.open("scorp1.png"))
+    img_shoot2 = ImageTk.PhotoImage(Image.open("shoot2.png"))
+    img_shield2 = ImageTk.PhotoImage(Image.open("shield2.png"))
+    img_scorp2 = ImageTk.PhotoImage(Image.open("scorp2.png"))
+
+
+    l_player = Label(window,image = img_shoot2)
+    l_computer = Label(window,image = img_shoot1)
+    l_computer.grid(row = 1,column=0)
+    l_player.grid(row=1,column=4)
+
+
+    computer_score =Label(window,text=0,font=('arial',50,"bold"),bg='white',fg="red")
+    player_score =Label(window,text=0,font=('arial',50,"bold"),bg='white',fg="red")
+    player_score.grid(row=1,column=3)
+    computer_score.grid(row=1,column=1)
+
+    player_display = Label(window,font=('arial',20,"bold"),
+                             text = "PLAYER",bg="blue",fg = "orange")
+    computer_display = Label(window,font=('arial',20,"bold"),
+                             text = "COMPUTER",bg="blue",fg = "orange")
+
+    computer_display.grid(row=0,column=1)
+    player_display.grid(row=0,column=3)
+    
+
+
+    final_msg = Label(window,font=("arial",40,"bold"),bg="red",fg = "white")
+    final_msg.grid(row = 3,column = 2)
+
+
+    def updateMessage(a):
+        final_msg["text"] = a
+    def Computer_update():
+        final= int(computer_score['text'])
+        final+=1
+        
+        if final==10:
+            
+             messagebox.showinfo("Computer reached the highest"+str(final)) 
+             window.destroy()
+        computer_score["text"] = str(final)
+    def player_update():
+        final= int(player_score['text'])
+        final+=1
+        player_score["text"] = str(final)
+        if final==10:
+            messagebox.showinfo("You reached the highest"+str(final))
+            window.destroy()
+            
+    def winner_check(p,c):
+         
+              if p==c:
+                  updateMessage("It's a tie")
+              elif p=="shoot":
+                  if c=="shield":
+                     updateMessage("Computer Wins")
+                     
+                     Computer_update()
+                  else:
+                      updateMessage("Player Wins !!")
+                      
+                      player_update()
+              elif p=="shield":
+                  if c == "scorp":
+                      updateMessage("Computer Wins")
+                      
+                      Computer_update()
+                  else:
+                      updateMessage("Player Wins !!")
+                      
+                      player_update()
+              elif p=="scorp":
+                  if c == "shoot":
+                      updateMessage("Computer Wins")
+                      
+                      Computer_update()
+                  else:
+                      updateMessage("Player Wins !!")
+                      
+                      player_update()
+              else:
+                  pass
+
+              
+                  
+                     
+        
+
+    to_select= ["shoot","shield","scorp"] 
+
+    def choice_update(a):
+        choice_computer =to_select[randint(0,2)]
+        if choice_computer == "shoot":
+            l_computer.configure(image = img_shoot1)
+        elif choice_computer =="shield":
+            l_computer.configure(image = img_shield1)
+        else:
+            l_computer.configure(image=img_scorp1)
+        
+        if a == "shoot":
+            l_player.configure(image=img_shoot2)
+        elif a =="shield":
+            l_player.configure(image=img_shield2)
+        else:
+            l_player.configure(image=img_scorp2)
+            
+        winner_check(a,choice_computer)
+
+
+    b_shoot = Button(window,width=10,height = 5,text = "SHOOT",
+                     font=("arial",20,"bold"), bg= "black",fg="white",command=
+                     lambda:choice_update("shoot")).grid(row=2,column=1)
+    b_shield = Button(window,width=10,height = 5,text = "SHIELD",
+                     font=("arial",20,"bold") , bg= "black",fg="white",command= 
+                     lambda:choice_update("shield")).grid(row=2,column=2)                                             
+    b_scorp = Button(window,width=10,height = 5,text = "SCORP",
+                     font=("arial",20,"bold"),bg = "black",fg="white",command=
+                     lambda:choice_update("scorp")).grid(row=2,column=3)
+
+
+
+    exit=Button(window,text='exit',command=window.destroy).grid(row=4,column=4)
+          
+          
+      
+          
+            
+       
+    window.mainloop()
+     
+
+game()
+
